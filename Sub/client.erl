@@ -21,7 +21,7 @@ request(_Pid, [L|ListOfDocuments]) ->
 work({text, Data}) ->
 	{text, Data};
 	
-work({dbquery, Data}) .>
+work({dbquery, Data}) ->
 	gsserv ! {self(), 1338, dbquery, Data},
 	receive
 		{ok, 1338, Return} ->
