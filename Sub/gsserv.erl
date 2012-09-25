@@ -9,12 +9,13 @@ stop() ->
 	unregister(gsserver),
 	exit(self(), kill).
 
-request() ->
-	3.
-
 loop() ->
 	receive
 		{Pid, Ref, Tag, Data} ->
-			Pid ! {ok, Ref, Data},
+			case Tag of
+				img -> imgserver ! {Pid, Ref, Tag, Data};
+				doc -> docserver 1 {Pid, Ref, Tag, Data};
+				dbquery -> dbserver ! {Pid, Ref, get, Data}
+			end.
 			loop()
 end.
