@@ -1,0 +1,7 @@
+{doc,"header.document"}.
+{text,"It is better to write than to speak"}.
+{img,{bild1,100,100}}.
+{text,"Happy the lab'rer in his Sunday clothes!"}.
+{dbquery,bjorn}.
+{text,"In light-drab coat, smart waistcoat, well-darn'd hose,"}.
+{doc,"footer.document"}.

@@ -1,0 +1,7 @@
+{doc,"header.document"}.
+{text,"To her Doctor so dread. "}.
+{img,{bild3,100,100}}.
+{text,"'Oh! what shall I take for't?'"}.
+{dbquery,ginny}.
+{text,"Said this Doctor so dread "}.
+{doc,"footer.document"}.

@@ -1,0 +1,7 @@
+{doc,"header.document"}.
+{text,"Miss Lloyd has now sent to Miss Green,"}.
+{img,{bild2,100,100}}.
+{text,"As, on opening the box, may be seen,"}.
+{dbquery,buddy}.
+{text,"Some years of a Black Ploughman's Gauze,"}.
+{doc,"footer.document"}.

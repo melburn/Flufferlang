@@ -1,0 +1,7 @@
+{doc,"header.document"}.
+{text,"Another language known, "}.
+{img,{bild1,100,100}}.
+{text,"Ere tongue or sound can publish round "}.
+{dbquery,socks}.
+{text,"Her charms of flesh and bone."}.
+{doc,"footer.document"}.

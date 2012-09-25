@@ -1,0 +1,7 @@
+{doc,"header.document"}.
+{text,"Five hundred miles be found."}.
+{img,{bild1,100,100}}.
+{text,"Her wit descends on foes and friends "}.
+{dbquery,lucky}.
+{text,"Like famed Niagara's fall; "}.
+{doc,"footer.document"}.

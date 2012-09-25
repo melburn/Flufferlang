@@ -1,0 +1,7 @@
+{doc,"header.document"}.
+{text,"Whose name it was Newnham. "}.
+{img,{bild1,100,100}}.
+{text,"'For this pain in your head "}.
+{dbquery,gerry}.
+{text,"Ah! What can you do Ma'am?'"}.
+{doc,"footer.document"}.

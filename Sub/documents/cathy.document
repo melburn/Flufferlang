@@ -1,0 +1,7 @@
+{doc,"header.document"}.
+{text,"Said Miss Beckford, 'Suppose "}.
+{img,{bild2,100,100}}.
+{text,"If you think there's no risk, "}.
+{dbquery,cathy}.
+{text,"I take a good Dose "}.
+{doc,"footer.document"}.

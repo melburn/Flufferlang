@@ -1,0 +1,7 @@
+{doc,"header.document"}.
+{text,"'You shall have such a potion "}.
+{img,{bild1,100,100}}.
+{text,"And so will I too Ma'am.'"}.
+{dbquery,trouble}.
+{text,"In measured verse I'll now rehearse "}.
+{doc,"footer.document"}.
