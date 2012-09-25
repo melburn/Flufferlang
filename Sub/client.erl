@@ -47,7 +47,7 @@ work({doc, []}) ->
 	
 work({doc, [H|T]}) ->
 	NewH = work(H),
-	NewT = work({doc, T})
+	NewT = work({doc, T}),
 	[NewH|NewT];
 	
 work({doc, Data}) ->
