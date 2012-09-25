@@ -7,7 +7,7 @@ start() ->
 		docserver:start(),
 		dbserver:start(),
 		imgserver:start(),
-		register(gsserver, Pid)
+		register(gsserver, Pid),
 	catch
 		_:_ -> error
 	end.

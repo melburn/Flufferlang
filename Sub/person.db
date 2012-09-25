@@ -1,0 +1,28 @@
+{patrik, "Patrik Nyblom", [yoshi]}.
+{yoshi, "Yoshi the cat", []}.
+{jozef, "Jozef Swiatycki", []}.
+{bjorn, "Björn Bearson", [bitis]}.
+{bitis, "Bitis the cat", []}.
+{ella, "Ella Rullgardina", [sticky]}.
+{sticky, "Sticky the stick insect", []}.
+{mirre, "Miriam Cullen", [ginny,cathy]}.
+{ginny, "Ginny the guinea pig", [gerry]}.
+{gerry, "Gerry the gerbil",[]}.
+{cathy, "Cathy the cat", []}.
+{lotta, "Lotta McCoy", [trouble]}.
+{trouble, "Troble the tribble", []}.
+{sheldon, "Sheldon Cooper", [zazzies,lucky]}.
+{zazzies, "Zazziez the zazziest cat", []}.
+{lucky, "Lucky the luckless",[]}.
+{joe, "Joe Carraclough", [lassie]}.
+{lassie, "Lassie the original", []}.
+{lee, "Lee Duncan", [rinty]}.
+{rinty, "Rin Tin Tin", []}.
+{hillary, "Hillary Clinton", [socks, buddy]}.
+{socks, "Socks the cat", []}.
+{buddy, "Buddy the dog", []}.
+{paris, "Paris Hilton", [tinkerbell]}.
+{tinkerbell, "Tinkerbell the chihuahua", []}.
+{albert, "Albert Payson Terhune", [lad]}.
+{lad, "Lad the collie", []}.
+

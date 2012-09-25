@@ -1,0 +1,7 @@
+{doc,"header.document"}.
+{text,"The charms of lovely Anna: "}.
+{img,{bild2,100,100}}.
+{text,"And, first, her mind is unconfined "}.
+{dbquery,sheldon}.
+{text,"Like any vast savannah."}.
+{doc,"footer.document"}.
