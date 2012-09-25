@@ -3,10 +3,10 @@
 
 start() ->
 	spawn(?MODULE, loop, []).
-request(Pid, []) ->
+request(_Pid, []) ->
 	[];
 
-request(Pid, [L|ListOfDocuments]) ->
+request(_Pid, [L|ListOfDocuments]) ->
 	{One, Two} = L,
 	T = request(self(), ListOfDocuments),
 	gsserver ! {self(), 1337, One, Two},
@@ -18,10 +18,10 @@ request(Pid, [L|ListOfDocuments]) ->
 	end,
 	[H|T].	
 
-work({text, Data})
+work({text, Data}) ->
 	{text, Data};
 	
-work({dbquery, Data})
+work({dbquery, Data}) .>
 	gsserv ! {self(), 1338, dbquery, Data},
 	receive
 		{ok, 1338, Return} ->
@@ -30,7 +30,7 @@ work({dbquery, Data})
 			error
 	end;
 	
-work({img, {Name, Height, Width}})
+work({img, {Name, Height, Width}}) ->
 	gsserver ! {self(), 1336, img, {Name, Height, Width}},
 	receive
 		{ok, 1336, Return} ->
@@ -39,18 +39,18 @@ work({img, {Name, Height, Width}})
 			error
 	end;
 	
-work({img, Data})
+work({img, Data}) ->
 	{img, Data};
 
-work({doc, []})
+work({doc, []}) ->
 	[];
 	
-work({doc, [H|T]})
+work({doc, [H|T]}) ->
 	NewH = work(H),
 	NewT = work({doc, T})
 	[NewH|NewT];
 	
-work({doc, Data})
+work({doc, Data}) ->
 	gsserver ! {self(), 1339, doc, Data},
 	receive
 		{ok, 1339, Return} ->
