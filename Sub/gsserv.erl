@@ -4,9 +4,6 @@
 start() ->
 	try
 		Pid = spawn(?MODULE, loop, []),
-		docserver:start(),
-		dbserver:start(),
-		imgserver:start(),
 		register(gsserver, Pid)
 	catch
 		_:_ -> error
@@ -17,12 +14,33 @@ stop() ->
 	exit(self(), kill).
 
 loop() ->
-	receive
+	ImgPid = imgserver:start(),
+	DocPid = docserver:Start(),
+	DBPid = dbserver:start(),
+	loop(ImgPid, DocPid, DBPid);
+
+loop(ImgPid, DocPid, DBPid) -> 
+receive
 		{Pid, Ref, Tag, Data} ->
 			case Tag of
-				img -> imgserver ! {Pid, Ref, Tag, Data};
-				doc -> docserver ! {Pid, Ref, Tag, Data};
-				dbquery -> dbserver ! {Pid, Ref, get, Data}
+				img -> imgcall(ImgPid, {Pid, Ref, Tag, Data});
+				doc -> doccall(DocPid, {Pid, Ref, Tag, Data});
+				dbquery -> dbcall(DBPid, {Pid, Ref, get, Data})
 			end,
-			loop()
+			loop(ImgPid, DocPid, DBPid);
+		{ok, {Pid, Ref}, {Name, L}} ->
+			;
+		{ok, {Pid, Ref}, [H|T]} ->
+			;
+		{ok, {Pid, Ref}, V} ->
+
 end.
+
+imgcall(ImgPid, {Pid, Ref, Tag, {Imgname, W, H}}) ->
+	.
+
+doccall(DocPid, {Pid, Ref, Tag, Data}) ->
+	.
+
+dbcall(DBPid, {Pid, Ref, Tag, Data}) ->
+	.
