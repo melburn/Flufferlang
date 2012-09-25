@@ -18,6 +18,38 @@ request(Pid, [L|ListOfDocuments]) ->
 	end,
 	[H|T].	
 
+work({text, Data})
+	{text, Data};
+	
+work({dbquery, Data})
+	gsserv ! {self(), 1338, dbquery, Data},
+	receive
+		{ok, 1338, Return} ->
+			work(Return);
+		{error, 1338} ->
+			error
+	end;
+	
+work({img, {Name, Height, Width}})
+	gsserver ! {self(), 1336, img, {Name, Height, Width}},
+	receive
+		{ok, 1336, Return} ->
+			work(Return);
+		{error, 1336} ->
+			error
+	end;
+	
+work({img, Data})
+	{img, Data};
+	
+work({doc, Data})
+	gsserver ! {self(), 1339, doc, Data},
+	receive
+		{ok, 1339, Return} ->
+			work(Return);
+		{error, 1339} ->
+			error
+	end.
 
 
 loop() ->
