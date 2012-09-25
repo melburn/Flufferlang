@@ -41,6 +41,14 @@ work({img, {Name, Height, Width}})
 	
 work({img, Data})
 	{img, Data};
+
+work({doc, []})
+	[];
+	
+work({doc, [H|T]})
+	NewH = work(H),
+	NewT = work({doc, T})
+	[NewH|NewT];
 	
 work({doc, Data})
 	gsserver ! {self(), 1339, doc, Data},
