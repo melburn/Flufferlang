@@ -2,8 +2,15 @@
 -compile(export_all).
 
 start() ->
-	Pid = spawn(?MODULE, loop, []),
-	register(gsserver, Pid).
+	try
+		Pid = spawn(?MODULE, loop, []),
+		docserver:start(),
+		dbserver:start(),
+		imgserver:start(),
+		register(gsserver, Pid)
+	catch
+		_:_ -> error
+	end.
 
 stop() ->
 	unregister(gsserver),
@@ -14,8 +21,8 @@ loop() ->
 		{Pid, Ref, Tag, Data} ->
 			case Tag of
 				img -> imgserver ! {Pid, Ref, Tag, Data};
-				doc -> docserver 1 {Pid, Ref, Tag, Data};
+				doc -> docserver ! {Pid, Ref, Tag, Data};
 				dbquery -> dbserver ! {Pid, Ref, get, Data}
-			end.
+			end,
 			loop()
 end.
