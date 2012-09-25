@@ -3,10 +3,10 @@
 
 start() ->
 	Pid = spawn(?MODULE, loop, []),
-	register(server, Pid).
+	register(gsserver, Pid).
 
 stop() ->
-	unregister(server),
+	unregister(gsserver),
 	exit(self(), kill).
 
 request() ->
@@ -15,6 +15,6 @@ request() ->
 loop() ->
 	receive
 		{Pid, Ref, Tag, Data} ->
-			Pid ! Data,
+			Pid ! {ok, Ref, Data},
 			loop()
 end.

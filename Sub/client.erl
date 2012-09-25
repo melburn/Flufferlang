@@ -9,10 +9,12 @@ request(Pid, []) ->
 request(Pid, [L|ListOfDocuments]) ->
 	{One, Two} = L,
 	T = request(self(), ListOfDocuments),
-	server ! {self(), 1337, One, Two},
+	gsserver ! {self(), 1337, One, Two},
 	receive
-		H ->
-			H
+		{ok, 1337, Document} ->
+			H = Document;
+		{error, 1337} ->
+			H = fail
 	end,
 	[H|T].	
 
