@@ -1,22 +1,24 @@
 -module(client).
 -compile(export_all).
 
+<<<<<<< HEAD
 start() ->
 	spawn_link(?MODULE, loop, []).
 request(_Pid, []) ->
 	[];
+=======
+start_link() ->
+	spawn(?MODULE, loop, []).
+>>>>>>> 670a86a07bcce58288c2969a2a7e133d543c6242
 
-request(_Pid, [L|ListOfDocuments]) ->
-	{One, Two} = L,
-	T = request(self(), ListOfDocuments),
-	gsserver ! {self(), 1337, One, Two},
+request(Pid, ListOfDocuments) ->
+	Pid ! {self(), daRef, ListOfDocuments},
 	receive
-		{ok, 1337, Document} ->
-			H = Document;
-		{error, 1337} ->
-			H = fail
-	end,
-	lists:append(work(H), T).
+		{ok, daRef, ListofAnswers} ->
+			ListofAnswers;
+		_ ->	
+			error
+	end.
 
 work({text, Data}) ->
 	[{text, Data}];
@@ -57,12 +59,21 @@ work({doc, Data}) ->
 			work(Return);
 		{error, 1339} ->
 			error
-	end.
-	
+	end;
+
+work([]) ->
+	[];
+
+work([H|T]) ->
+	T2 = work(T),
+	[work({doc, H})| T2].
+
 loop() ->
 	receive
-		{From, Data} ->
-			From ! Data,
-			loop()
+		{Pid, Ref, Data} ->
+			Pid ! {ok, Ref, work(Data)},
+			loop();
+		_ ->
+			badType
 	end.
 
