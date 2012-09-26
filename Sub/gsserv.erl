@@ -10,11 +10,26 @@ start() ->
 	end.
 
 stop() ->
+	Ref = monitor(process, gsserver),
 	try
-		unregister(gsserver),
-		exit(self(), kill)
+		gsserver ! stop,
+		receive
+			{'DOWN', Ref, process, {gsserver, _},_} ->
+				{ok, stopped}
+		after 3000 ->
+				exit(whereis(gsserver), kill),
+				receive
+					{'DOWN', Ref, process, _, _} ->
+						{ok, killed}
+				after 3000 ->
+						demonitor(Ref, [flush]),
+						{error, timeout}
+				end
+		end		
 	catch
-		_:_ -> error_stop
+	_:_ ->
+		demonitor(Ref, [flush]),
+		{error, timeout}
 	end.
 
 loop() ->

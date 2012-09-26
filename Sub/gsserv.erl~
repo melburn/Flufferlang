@@ -10,11 +10,26 @@ start() ->
 	end.
 
 stop() ->
+	Ref = monitor(process, gsserver),
 	try
-		unregister(gsserver),
-		exit(self(), kill)
+		gsserver ! stop,
+		receive
+			{'DOWN', Ref, process, {gsserver, _},_} ->
+				{ok, stopped}
+		after 3000 ->
+				exit(whereis(gsserver), kill),
+				receive
+					{'DOWN', Ref, process, _, _} ->
+						{ok, killed}
+				after 3000 ->
+						demonitor(Ref, [flush]),
+						{error, timeout}
+				end
+		end		
 	catch
-		_:_ -> error_stop
+	_:_ ->
+		demonitor(Ref, [flush]),
+		{error, timeout}
 	end.
 
 loop() ->
@@ -41,7 +56,7 @@ receive
 		{ok, {Pid, Ref}, Data} ->
 			imgreceive(ok, Pid, Ref, Data),
 			loop(ImgPid, DocPid, DBPid);
-		L -> error_answer_from_servers
+		Other -> error_answer_from_servers
 end.
 
 imgcall(ImgPid, {Pid, Ref, Tag, {Imgname, W, H}}) ->
@@ -60,4 +75,10 @@ docreceive(ok, Pid, Ref, L) ->
 	Pid ! {ok, Ref, {doc, L}}.
 	
 dbreceive(ok, Pid, Ref, Text, L) ->
-	Pid ! {ok, Ref, {doc, [{text, Text}|L]}}.
+	Pid ! {ok, Ref, {doc, [{text, Text}|workDB(L)]}}.
+	
+workDB([]) ->
+	[];
+	
+workDB([H|T]) ->
+	[{dbquery, H}|workDB(T)].
