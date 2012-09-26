@@ -1,25 +1,27 @@
 -module(client).
 -compile(export_all).
 
+<<<<<<< HEAD
 start() ->
-	spawn(?MODULE, loop, []).
+	spawn_link(?MODULE, loop, []).
 request(_Pid, []) ->
 	[];
+=======
+start_link() ->
+	spawn(?MODULE, loop, []).
+>>>>>>> 670a86a07bcce58288c2969a2a7e133d543c6242
 
-request(_Pid, [L|ListOfDocuments]) ->
-	{One, Two} = L,
-	T = request(self(), ListOfDocuments),
-	gsserver ! {self(), 1337, One, Two},
+request(Pid, ListOfDocuments) ->
+	Pid ! {self(), daRef, ListOfDocuments},
 	receive
-		{ok, 1337, Document} ->
-			H = Document;
-		{error, 1337} ->
-			H = fail
-	end,
-	[work(H)|T].	
+		{ok, daRef, ListofAnswers} ->
+			ListofAnswers;
+		_ ->	
+			error
+	end.
 
 work({text, Data}) ->
-	{text, Data};
+	[{text, Data}];
 	
 work({dbquery, Data}) ->
 	gsserver ! {self(), 1338, dbquery, Data},
@@ -40,16 +42,16 @@ work({img, {Name, Height, Width}}) ->
 	end;
 	
 work({img, Data}) ->
-	{img, Data};
-
+	[{img, Data}];
+	
 work({doc, []}) ->
 	[];
 	
-work({doc, [H|T]}) ->
-	NewH = work(H),
+work({doc, [{Tag, Data}|T]}) ->
+	NewH = work({Tag, Data}),
 	NewT = work({doc, T}),
-	[NewH|NewT];
-	
+	lists:append(NewH,NewT);
+
 work({doc, Data}) ->
 	gsserver ! {self(), 1339, doc, Data},
 	receive
@@ -58,15 +60,20 @@ work({doc, Data}) ->
 		{error, 1339} ->
 			error
 	end;
-	
-work(A) ->
-	io:frwite(A).
 
+work([]) ->
+	[];
+
+work([H|T]) ->
+	T2 = work(T),
+	[work({doc, H})| T2].
 
 loop() ->
 	receive
-		{From, Data} ->
-			From ! Data,
-			loop()
+		{Pid, Ref, Data} ->
+			Pid ! {ok, Ref, work(Data)},
+			loop();
+		_ ->
+			badType
 	end.
 
