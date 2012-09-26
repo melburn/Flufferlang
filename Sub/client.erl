@@ -59,11 +59,6 @@ work({doc, Data}) ->
 			error
 	end.
 	
-%work(A) ->
-%	io:fwrite("lol2"),
-%	[A].
-
-
 loop() ->
 	receive
 		{From, Data} ->

@@ -2,7 +2,7 @@
 -compile(export_all).
 
 start() ->
-	spawn(?MODULE, loop, []).
+	spawn_link(?MODULE, loop, []).
 request(_Pid, []) ->
 	[];
 
