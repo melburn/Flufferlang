@@ -16,10 +16,10 @@ request(_Pid, [L|ListOfDocuments]) ->
 		{error, 1337} ->
 			H = fail
 	end,
-	[work(H)|T].	
+	lists:append(work(H), T).
 
 work({text, Data}) ->
-	{text, Data};
+	[{text, Data}];
 	
 work({dbquery, Data}) ->
 	gsserver ! {self(), 1338, dbquery, Data},
@@ -40,16 +40,16 @@ work({img, {Name, Height, Width}}) ->
 	end;
 	
 work({img, Data}) ->
-	{img, Data};
-
+	[{img, Data}];
+	
 work({doc, []}) ->
 	[];
 	
-work({doc, [H|T]}) ->
-	NewH = work(H),
+work({doc, [{Tag, Data}|T]}) ->
+	NewH = work({Tag, Data}),
 	NewT = work({doc, T}),
-	[NewH|NewT];
-	
+	lists:append(NewH,NewT);
+
 work({doc, Data}) ->
 	gsserver ! {self(), 1339, doc, Data},
 	receive
@@ -57,10 +57,11 @@ work({doc, Data}) ->
 			work(Return);
 		{error, 1339} ->
 			error
-	end;
+	end.
 	
-work(A) ->
-	A.
+%work(A) ->
+%	io:fwrite("lol2"),
+%	[A].
 
 
 loop() ->
