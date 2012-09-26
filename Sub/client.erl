@@ -16,7 +16,7 @@ request(_Pid, [L|ListOfDocuments]) ->
 		{error, 1337} ->
 			H = fail
 	end,
-	[H|T].	
+	[work(H)|T].	
 
 work({text, Data}) ->
 	{text, Data};
@@ -57,7 +57,10 @@ work({doc, Data}) ->
 			work(Return);
 		{error, 1339} ->
 			error
-	end.
+	end;
+	
+work(A) ->
+	A.
 
 
 loop() ->
