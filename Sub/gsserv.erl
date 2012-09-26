@@ -41,7 +41,7 @@ receive
 		{ok, {Pid, Ref}, Data} ->
 			imgreceive(ok, Pid, Ref, Data),
 			loop(ImgPid, DocPid, DBPid);
-		L -> error_answer_from_servers
+		Other -> error_answer_from_servers
 end.
 
 imgcall(ImgPid, {Pid, Ref, Tag, {Imgname, W, H}}) ->

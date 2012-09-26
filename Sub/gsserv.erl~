@@ -6,7 +6,7 @@ start() ->
 		Pid = spawn(?MODULE, loop, []),
 		register(gsserver, Pid)
 	catch
-		_:_ -> error
+		_:_ -> error_start
 	end.
 
 stop() ->
