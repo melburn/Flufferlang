@@ -60,4 +60,10 @@ docreceive(ok, Pid, Ref, L) ->
 	Pid ! {ok, Ref, {doc, L}}.
 	
 dbreceive(ok, Pid, Ref, Text, L) ->
-	Pid ! {ok, Ref, {doc, [{text, Text}|L]}}.
+	Pid ! {ok, Ref, {doc, [{text, Text}|workDB(L)]}}.
+	
+workDB([]) ->
+	[];
+	
+workDB([H|T]) ->
+	[{dbquery, H}|workDB(T)].
