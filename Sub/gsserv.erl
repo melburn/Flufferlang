@@ -6,12 +6,16 @@ start() ->
 		Pid = spawn(?MODULE, loop, []),
 		register(gsserver, Pid)
 	catch
-		_:_ -> error
+		_:_ -> error_start
 	end.
 
 stop() ->
-	unregister(gsserver),
-	exit(self(), kill).
+	try
+		unregister(gsserver),
+		exit(self(), kill)
+	catch
+		_:_ -> error_stop
+	end.
 
 loop() ->
 	ImgPid = imgserver:start(),
@@ -36,7 +40,8 @@ receive
 			loop(ImgPid, DocPid, DBPid);
 		{ok, {Pid, Ref}, Data} ->
 			imgreceive(ok, Pid, Ref, Data),
-			loop(ImgPid, DocPid, DBPid)
+			loop(ImgPid, DocPid, DBPid);
+		L -> error_answer_from_servers
 end.
 
 imgcall(ImgPid, {Pid, Ref, Tag, {Imgname, W, H}}) ->
