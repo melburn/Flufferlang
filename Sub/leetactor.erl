@@ -14,14 +14,12 @@ loop() ->
 				_ ->
 					ContentPid ! {self(), Ref, get, Data}	
 			end,
-			io:fwrite("1"),
 			receive
 				{ok, Ref, {Text, L}} ->
 					dbreceive(ok, ClientPid, Ref, Text, L);
 				{ok, Ref, [Head|Tail]} ->
 					docreceive(ok, ClientPid, Ref, [Head|Tail]);
 				{ok, Ref, D} ->
-					io:fwrite("2"),
 					imgreceive(ok, ClientPid, Ref, D)
 			end,
 		loop()
