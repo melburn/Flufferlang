@@ -2,7 +2,7 @@
 -compile(export_all).
 
 start_link() ->
-	spawn(?MODULE, loop, []).
+	spawn_link(?MODULE, loop, []).
 
 request(Pid, ListOfDocuments) ->
 	Pid ! {self(), daRef, ListOfDocuments},

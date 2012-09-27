@@ -1,15 +1,8 @@
 -module(client).
 -compile(export_all).
 
-<<<<<<< HEAD
-start() ->
-	spawn_link(?MODULE, loop, []).
-request(_Pid, []) ->
-	[];
-=======
 start_link() ->
 	spawn(?MODULE, loop, []).
->>>>>>> 670a86a07bcce58288c2969a2a7e133d543c6242
 
 request(Pid, ListOfDocuments) ->
 	Pid ! {self(), daRef, ListOfDocuments},

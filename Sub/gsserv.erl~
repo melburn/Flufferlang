@@ -3,7 +3,7 @@
 
 start() ->
 	try
-		Pid = spawn(?MODULE, loop, []),
+		Pid = spawn_link(?MODULE, loop, []),
 		register(gsserver, Pid)
 	catch
 		_:_ -> error_start
@@ -41,11 +41,7 @@ loop() ->
 loop(ImgPid, DocPid, DBPid) -> 
 receive
 		{Pid, Ref, Tag, Data} ->
-			case Tag of
-				img -> imgcall(ImgPid, {Pid, Ref, get, Data});
-				doc -> doccall(DocPid, {Pid, Ref, get, Data});
-				dbquery -> dbcall(DBPid, {Pid, Ref, get, Data})
-			end,
+			spawn_link(?MODULE, majorcall, [ImgPid, DocPid, DBPid, {Pid, Ref, Tag, Data}]),
 			loop(ImgPid, DocPid, DBPid);
 		{ok, {Pid, Ref}, {Text, L}} ->
 			dbreceive(ok, Pid, Ref, Text, L),
@@ -58,6 +54,13 @@ receive
 			loop(ImgPid, DocPid, DBPid);
 		Other -> error_answer_from_servers
 end.
+
+majorcall(ImgPid, DocPid, DBPid, {Pid, Ref, Tag, Data}) ->
+	case Tag of 
+		img -> imgcall(ImgPid, {Pid, Ref, get, Data});
+		doc -> doccall(DocPid, {Pid, Ref, get, Data});
+		dbquery -> dbcall(DBPid, {Pid, Ref, get, Data})
+	end.
 
 imgcall(ImgPid, {Pid, Ref, Tag, {Imgname, W, H}}) ->
 	ImgPid ! {self(), {Pid, Ref}, Tag, Imgname, W, H}.

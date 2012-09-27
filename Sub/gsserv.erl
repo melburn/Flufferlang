@@ -41,7 +41,7 @@ loop() ->
 loop(ImgPid, DocPid, DBPid) -> 
 receive
 		{Pid, Ref, Tag, Data} ->
-			case Tag of
+			case Tag of 
 				img -> imgcall(ImgPid, {Pid, Ref, get, Data});
 				doc -> doccall(DocPid, {Pid, Ref, get, Data});
 				dbquery -> dbcall(DBPid, {Pid, Ref, get, Data})
