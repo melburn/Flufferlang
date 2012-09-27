@@ -42,9 +42,9 @@ loop(ImgPid, DocPid, DBPid) ->
 receive
 	{Pid, Ref, Tag, Data} ->
 		case Tag of
-			img -> imgcall(ImgPid, {Pid, Ref, get, Data});
-			doc -> doccall(DocPid, {Pid, Ref, get, Data});
-			dbquery -> dbcall(DBPid, {Pid, Ref, get, Data})
+			img -> imgcall(ImgPid, {Pid, Ref, Tag, Data});
+			doc -> doccall(DocPid, {Pid, Ref, Tag, Data});
+			dbquery -> dbcall(DBPid, {Pid, Ref, Tag, Data})
 		end,
 		loop(ImgPid, DocPid, DBPid)
 end.
