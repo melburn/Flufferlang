@@ -21,9 +21,8 @@ loop() ->
 					docreceive(ok, ClientPid, Ref, [Head|Tail]);
 				{ok, Ref, D} ->
 					imgreceive(ok, ClientPid, Ref, D)
-			end,
-		loop()
-	end.
+			end
+		end.
 
 
 imgreceive(ok, Pid, Ref, Data) ->
